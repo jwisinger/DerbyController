@@ -101,6 +101,7 @@ void loop() {
     resultsUpdated = false;
   }
 
+  M5.Speaker.update();
   //delay(500);
 }
 

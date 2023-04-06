@@ -24,16 +24,19 @@ static void RaceCallback(int step)
     case RELAY_RED:
       relay.setRelay(RELAY_YELLOW, true);
       onceTicker.once(1.0f, RaceCallback, RELAY_YELLOW);
+      M5.Speaker.tone(512, 500);
       derbyUi.displayCountdown("2");
       break;
     case RELAY_YELLOW:
       relay.setRelay(RELAY_GREEN, true);
       onceTicker.once(1.0f, RaceCallback, RELAY_GREEN);
+      M5.Speaker.tone(512, 500);
       derbyUi.displayCountdown("1");
       break;
     case RELAY_GREEN:
       relay.setRelay(RELAY_START, true);
       onceTicker.once(1.0f, RaceCallback, RELAY_START);
+      M5.Speaker.tone(1024, 500);
       startTime = micros();
       derbyUi.displayCountdown(" ");
       break;
@@ -56,6 +59,7 @@ bool RaceController::init()
   {
     relay.setAllRelay(false);
     derbyUi.init();
+    M5.Speaker.begin();
     return true;
   }
   else
@@ -72,6 +76,7 @@ bool RaceController::startRace(callback_t raceStarted)
   raceInProgress = true;
   relay.setRelay(RELAY_RED, true);
   onceTicker.once(1.0f, RaceCallback, RELAY_RED);
+  M5.Speaker.tone(512, 500);
   derbyUi.displayCountdown("3");
   for(int i = 0; i < sizeof(endTime)/sizeof(endTime[0]); i++) endTime[i] = 0;
 
