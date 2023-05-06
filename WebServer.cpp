@@ -41,12 +41,13 @@ const char *WebServer::getPassword()
   return password;
 }
 
-const IPAddress WebServer::getIp()
+const IPAddress *WebServer::getIp()
 {
-  return ip;
+  return &ip;
 }
 
-void WebServer::handleRequest(float runTimes[4]) {
+bool WebServer::handleRequest(float runTimes[4]) {
+  bool start = false;
   char raceTimes[100];
   WiFiClient client = server.available();
 
@@ -63,6 +64,7 @@ void WebServer::handleRequest(float runTimes[4]) {
           client.print("<html>");
           client.print("Started");
           client.print("</html>");
+          start = true;
         } else if (!strcmp("/read", msg)) {
           snprintf(raceTimes, sizeof(raceTimes), "%f,%f,%f,%f", runTimes[0], runTimes[1], runTimes[2], runTimes[3]);
           client.print("<html>");
@@ -77,4 +79,5 @@ void WebServer::handleRequest(float runTimes[4]) {
       }
     }
   }
+  return start; 
 }

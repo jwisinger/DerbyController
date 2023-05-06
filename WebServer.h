@@ -6,10 +6,10 @@ class WebServer {
 public:
   WebServer();
   void init();
-  void handleRequest(float runTimes[4]);
+  bool handleRequest(float runTimes[4]);
   const char *getSsid();
   const char *getPassword();
-  const IPAddress getIp();
+  const IPAddress *getIp();
 private:
   bool getNextCharacter(WiFiClient *client);
 };

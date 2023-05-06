@@ -16,6 +16,7 @@ public:
   void captureTime(int lane);
   void updateResults();
   bool startRace(callback_t raceStarted);
+  void displayWifiInfo(const char *ssid, const char *pwd, const IPAddress *ip);
   float runTimes[LANE_COUNT];
 private:
   unsigned long endTime[LANE_COUNT];

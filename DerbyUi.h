@@ -11,6 +11,7 @@ public:
   void init();
   void displayCountdown(String val);
   void displayRaceTimes(float raceTimes[], int lanes);
+  void displayWifiInfo(const char *ssid, const char *pwd, const IPAddress *ip);
 private:
   M5GFX display;
   LGFX_Button buttonStart;

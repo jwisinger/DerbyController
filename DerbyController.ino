@@ -94,20 +94,7 @@ void loop() {
 
   if (buttonBPressed) {
     buttonBPressed = false;
-    M5.Lcd.setBrightness(100);
-    M5.Lcd.setTextSize(3);
-    M5.Lcd.setCursor(50, 20);
-    M5.Lcd.print("Wi-Fi Server");
-    M5.Lcd.setTextSize(2);
-    M5.Lcd.setCursor(50, 60);
-    M5.Lcd.print("SSID: ");
-    M5.Lcd.print(gWebServer.getSsid());
-    M5.Lcd.setCursor(50, 80);
-    M5.Lcd.print("PSWD: ");
-    M5.Lcd.print(gWebServer.getPassword());
-    M5.Lcd.setCursor(50, 100);
-    M5.Lcd.print("URL: ");
-    M5.Lcd.print(gWebServer.getIp());
+     gRaceController.displayWifiInfo(gWebServer.getSsid(), gWebServer.getPassword(), gWebServer.getIp());
   }
 
   if (buttonCPressed) {
@@ -122,6 +109,9 @@ void loop() {
     resultsUpdated = false;
   }
 
-  gWebServer.handleRequest(gRaceController.runTimes);
+  if (gWebServer.handleRequest(gRaceController.runTimes)) {
+    buttonAPressed = true;
+  }
+
   M5.Speaker.update();
 }

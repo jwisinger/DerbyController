@@ -64,6 +64,7 @@ bool RaceController::init() {
 bool RaceController::startRace(callback_t raceStarted) {
   if (raceInProgress) return false;
 
+  derbyUi.init();
   raceStartedFunction = raceStarted;
   raceInProgress = true;
   relay.setRelay(RELAY_RED, true);
@@ -73,6 +74,11 @@ bool RaceController::startRace(callback_t raceStarted) {
   for (int i = 0; i < sizeof(endTime) / sizeof(endTime[0]); i++) endTime[i] = 0;
 
   return true;
+}
+
+void RaceController::displayWifiInfo(const char *ssid, const char *pwd, const IPAddress *ip)
+{
+  derbyUi.displayWifiInfo(ssid, pwd, ip);
 }
 
 void RaceController::captureTime(int lane) {
