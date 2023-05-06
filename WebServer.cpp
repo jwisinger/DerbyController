@@ -61,18 +61,12 @@ bool WebServer::handleRequest(float runTimes[4]) {
         client.println();
 
         if (!strcmp("/start", msg)) {
-          client.print("<html>");
           client.print("Started");
-          client.print("</html>");
           start = true;
         } else if (!strcmp("/read", msg)) {
-          snprintf(raceTimes, sizeof(raceTimes), "%f,%f,%f,%f", runTimes[0], runTimes[1], runTimes[2], runTimes[3]);
-          client.print("<html>");
+          snprintf(raceTimes, sizeof(raceTimes), "Times %f,%f,%f,%f", runTimes[0], runTimes[1], runTimes[2], runTimes[3]);
           client.print(raceTimes);
-          client.print("</html>");
         }
-
-        client.println();
         client.println();
         rxPtr = 0;
         break;
