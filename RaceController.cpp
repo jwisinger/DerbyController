@@ -1,10 +1,10 @@
 #include "RaceController.h"
 #include "DerbyUi.h"
 
-#define RELAY_RED     0
-#define RELAY_YELLOW  1
-#define RELAY_GREEN   2
-#define RELAY_START   3
+#define RELAY_RED 0
+#define RELAY_YELLOW 1
+#define RELAY_GREEN 2
+#define RELAY_START 3
 
 static MODULE_4RELAY relay;
 static DerbyUi derbyUi;
@@ -13,14 +13,12 @@ static Ticker onceTicker;
 static unsigned long startTime = 0;
 callback_t raceStartedFunction;
 
-static void RaceCallback(int step)
-{
+static void RaceCallback(int step) {
   relay.setAllRelay(false);
 
-  if(!raceInProgress) return;
+  if (!raceInProgress) return;
 
-  switch(step)
-  {
+  switch (step) {
     case RELAY_RED:
       relay.setRelay(RELAY_YELLOW, true);
       onceTicker.once(1.0f, RaceCallback, RELAY_YELLOW);
@@ -36,7 +34,7 @@ static void RaceCallback(int step)
     case RELAY_GREEN:
       relay.setRelay(RELAY_START, true);
       onceTicker.once(1.0f, RaceCallback, RELAY_START);
-      M5.Speaker.tone(1024, 500);
+      M5.Speaker.tone(1024, 1000);
       startTime = micros();
       derbyUi.displayCountdown(" ");
       break;
@@ -47,53 +45,49 @@ static void RaceCallback(int step)
   }
 }
 
-RaceController::RaceController()
-{
+RaceController::RaceController() {
   raceInProgress = false;
 }
 
-bool RaceController::init()
-{
+bool RaceController::init() {
   raceInProgress = false;
-  if (relay.begin(&Wire, MODULE_4RELAY_ADDR, 21, 22, 200000L))
-  {
+  if (relay.begin(&Wire, MODULE_4RELAY_ADDR, 21, 22, 200000L)) {
     relay.setAllRelay(false);
     derbyUi.init();
     M5.Speaker.begin();
     return true;
-  }
-  else
-  {
+  } else {
     return false;
   }
 }
 
-bool RaceController::startRace(callback_t raceStarted)
-{
+bool RaceController::startRace(callback_t raceStarted) {
   if (raceInProgress) return false;
-  
+
+  derbyUi.init();
   raceStartedFunction = raceStarted;
   raceInProgress = true;
   relay.setRelay(RELAY_RED, true);
   onceTicker.once(1.0f, RaceCallback, RELAY_RED);
   M5.Speaker.tone(512, 500);
   derbyUi.displayCountdown("3");
-  for(int i = 0; i < sizeof(endTime)/sizeof(endTime[0]); i++) endTime[i] = 0;
+  for (int i = 0; i < sizeof(endTime) / sizeof(endTime[0]); i++) endTime[i] = 0;
 
   return true;
 }
 
-void RaceController::captureTime(int lane)
+void RaceController::displayWifiInfo(const char *ssid, const char *pwd, const IPAddress *ip, const char *version)
 {
+  derbyUi.displayWifiInfo(ssid, pwd, ip, version);
+}
+
+void RaceController::captureTime(int lane) {
   if (!raceInProgress) endTime[lane] = micros();
 }
 
-void RaceController::displayResults()
-{
-  float runTimes[LANE_COUNT];
-  for(int i = 0; i < LANE_COUNT; i++)
-  {
-    if(endTime[i] == 0) runTimes[i] = 0.0f;
+void RaceController::updateResults() {
+  for (int i = 0; i < LANE_COUNT; i++) {
+    if (endTime[i] == 0) runTimes[i] = 0.0f;
     else runTimes[i] = (endTime[i] - startTime) / 1000000.0;
   }
 

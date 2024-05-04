@@ -5,18 +5,18 @@
 #include <M5GFX.h>
 #include "Module_4RELAY.h"
 
-class DerbyUi
-{
-  public:
-    DerbyUi();
-    void init();
-    void displayCountdown(String val);
-    void displayRaceTimes(float raceTimes[], int lanes);
-  private:
-    M5GFX display;
-    LGFX_Button buttonStart;
-    LGFX_Button buttonInfo;
-    LGFX_Button buttonC;
+class DerbyUi {
+public:
+  DerbyUi();
+  void init();
+  void displayCountdown(String val);
+  void displayRaceTimes(float raceTimes[], int lanes);
+  void displayWifiInfo(const char *ssid, const char *pwd, const IPAddress *ip, const char *version);
+private:
+  M5GFX display;
+  LGFX_Button buttonStart;
+  LGFX_Button buttonInfo;
+  LGFX_Button buttonC;
 };
 
 #endif
