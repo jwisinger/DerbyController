@@ -76,9 +76,9 @@ bool RaceController::startRace(callback_t raceStarted) {
   return true;
 }
 
-void RaceController::displayWifiInfo(const char *ssid, const char *pwd, const IPAddress *ip)
+void RaceController::displayWifiInfo(const char *ssid, const char *pwd, const IPAddress *ip, const char *version)
 {
-  derbyUi.displayWifiInfo(ssid, pwd, ip);
+  derbyUi.displayWifiInfo(ssid, pwd, ip, version);
 }
 
 void RaceController::captureTime(int lane) {

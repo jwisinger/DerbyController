@@ -2,6 +2,8 @@
 #include "RaceController.h"
 #include "WebServer.h"
 
+const char version[] = "1.1";
+
 #define SENSOR_1 3
 #define SENSOR_2 1
 #define SENSOR_3 16
@@ -94,7 +96,7 @@ void loop() {
 
   if (buttonBPressed) {
     buttonBPressed = false;
-     gRaceController.displayWifiInfo(gWebServer.getSsid(), gWebServer.getPassword(), gWebServer.getIp());
+     gRaceController.displayWifiInfo(gWebServer.getSsid(), gWebServer.getPassword(), gWebServer.getIp(), version);
   }
 
   if (buttonCPressed) {

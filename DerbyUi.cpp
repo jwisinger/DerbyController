@@ -12,7 +12,7 @@ void DerbyUi::displayCountdown(String val) {
   M5.Lcd.print(val);
 }
 
-void DerbyUi::displayWifiInfo(const char *ssid, const char *pwd, const IPAddress *ip) {
+void DerbyUi::displayWifiInfo(const char *ssid, const char *pwd, const IPAddress *ip, const char *version) {
   display.clearDisplay();
   M5.Lcd.setTextColor(WHITE, BLACK);
   M5.Lcd.setTextSize(3);
@@ -28,6 +28,9 @@ void DerbyUi::displayWifiInfo(const char *ssid, const char *pwd, const IPAddress
   M5.Lcd.setCursor(50, 100);
   M5.Lcd.print("URL: ");
   M5.Lcd.print(*ip);
+  M5.Lcd.setCursor(50, 120);
+  M5.Lcd.print("Version: ");
+  M5.Lcd.print(version);
 }
 
 void DerbyUi::displayRaceTimes(float raceTimes[], int lanes) {
@@ -36,7 +39,26 @@ void DerbyUi::displayRaceTimes(float raceTimes[], int lanes) {
   M5.Lcd.setTextSize(3);
 
   for (int i = 0; i < lanes; i++) {
-    sprintf(text, "Lane %d: %2.3f", i + 1, raceTimes[i]);
+    char c;
+    switch(i)
+    {
+      case 0:
+        c = 'G';
+        break;
+      case 1:
+        c = 'I';
+        break;
+      case 2:
+        c = 'R';
+        break;
+      case 3:
+        c = 'L';
+        break;
+      default:
+        c = ' ';
+        break;
+    }
+    sprintf(text, "Lane %c: %2.3f", c, raceTimes[i]);
     M5.Lcd.setCursor(45, 70 + (i * 25));
     M5.Lcd.print(text);
   }
