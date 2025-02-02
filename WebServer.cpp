@@ -46,8 +46,8 @@ const IPAddress *WebServer::getIp()
   return &ip;
 }
 
-bool WebServer::handleRequest(float runTimes[4]) {
-  bool start = false;
+WebCommand WebServer::handleRequest(float runTimes[4]) {
+  WebCommand cmd = None;
   char raceTimes[100];
   WiFiClient client = server.available();
 
@@ -62,10 +62,26 @@ bool WebServer::handleRequest(float runTimes[4]) {
 
         if (!strcmp("/start", msg)) {
           client.print("Started");
-          start = true;
+          cmd = Start;
         } else if (!strcmp("/read", msg)) {
           snprintf(raceTimes, sizeof(raceTimes), "Times %f,%f,%f,%f", runTimes[0], runTimes[1], runTimes[2], runTimes[3]);
           client.print(raceTimes);
+          cmd = None;
+        } else if (!strcmp("/red", msg)) {
+          client.print("Red");
+          cmd = Red;
+        } else if (!strcmp("/yellow", msg)) {
+          client.print("Yellow");
+          cmd = Yellow;
+        } else if (!strcmp("/green", msg)) {
+          client.print("Green");
+          cmd = Green;
+        } else if (!strcmp("/go", msg)) {
+          client.print("Go");
+          cmd = Go;
+        } else if (!strcmp("/ping", msg)) {
+          client.print("Ping");
+          cmd = None;
         }
         client.println();
         rxPtr = 0;
@@ -73,5 +89,5 @@ bool WebServer::handleRequest(float runTimes[4]) {
       }
     }
   }
-  return start; 
+  return cmd; 
 }

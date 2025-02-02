@@ -111,8 +111,24 @@ void loop() {
     resultsUpdated = false;
   }
 
-  if (gWebServer.handleRequest(gRaceController.runTimes)) {
-    buttonAPressed = true;
+  switch (gWebServer.handleRequest(gRaceController.runTimes)) {
+    case Start:
+      buttonAPressed = true;
+      break;
+    case Red:
+      gRaceController.directControl(RELAY_RED);
+      break;
+    case Yellow:
+      gRaceController.directControl(RELAY_YELLOW);
+      break;
+    case Green:
+      gRaceController.directControl(RELAY_GREEN);
+      break;
+    case Go:
+      gRaceController.directControl(RELAY_START);
+      laneComplete = 0;
+      resultsUpdated = true;
+      break;
   }
 
   M5.Speaker.update();

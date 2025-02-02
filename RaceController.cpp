@@ -1,11 +1,6 @@
 #include "RaceController.h"
 #include "DerbyUi.h"
 
-#define RELAY_RED 0
-#define RELAY_YELLOW 1
-#define RELAY_GREEN 2
-#define RELAY_START 3
-
 static MODULE_4RELAY relay;
 static DerbyUi derbyUi;
 static bool raceInProgress;
@@ -92,4 +87,19 @@ void RaceController::updateResults() {
   }
 
   derbyUi.displayRaceTimes(runTimes, LANE_COUNT);
+}
+
+void RaceController::directControl(int cmd) {
+  relay.setAllRelay(false);
+  relay.setRelay(cmd, true);
+  derbyUi.init();
+
+  if (cmd == RELAY_START)
+  {
+      onceTicker.once(1.0f, RaceCallback, RELAY_NONE);
+      startTime = micros();
+      derbyUi.displayCountdown(" ");
+      raceInProgress = false;
+      for (int i = 0; i < sizeof(endTime) / sizeof(endTime[0]); i++) endTime[i] = 0;
+  }
 }
