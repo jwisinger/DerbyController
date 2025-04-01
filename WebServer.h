@@ -15,7 +15,7 @@ class WebServer {
 public:
   WebServer();
   void init();
-  WebCommand handleRequest(float runTimes[4]);
+  WebCommand handleRequest(float runTimes[4], int switchPressed[3]);
   const char *getSsid();
   const char *getPassword();
   const IPAddress *getIp();
