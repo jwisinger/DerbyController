@@ -2,12 +2,16 @@
 #include "RaceController.h"
 #include "WebServer.h"
 
-const char version[] = "1.1";
+const char version[] = "1.2";
 
 #define SENSOR_1 3
 #define SENSOR_2 1
 #define SENSOR_3 16
 #define SENSOR_4 2
+#define SWITCH_1 35
+#define SWITCH_2 5
+#define SWITCH_3 36
+
 #define BUTTON_A 39
 #define BUTTON_B 38
 #define BUTTON_C 37
@@ -18,6 +22,7 @@ WebServer gWebServer;
 static bool buttonAPressed = false;
 static bool buttonBPressed = false;
 static bool buttonCPressed = false;
+static int switchPressed[3] = {0, 0, 0};
 static bool resultsUpdated = false;
 static uint8_t laneComplete = 0xFF;
 
@@ -76,6 +81,10 @@ void setup() {
   pinMode(SENSOR_3, INPUT_PULLUP);
   pinMode(SENSOR_4, INPUT_PULLUP);
 
+  pinMode(SWITCH_1, INPUT_PULLUP);
+  pinMode(SWITCH_2, INPUT_PULLUP);
+  pinMode(SWITCH_3, INPUT_PULLUP);
+
   attachInterrupt(BUTTON_A, buttonA_Press, FALLING);
   attachInterrupt(BUTTON_B, buttonB_Press, FALLING);
   attachInterrupt(BUTTON_C, buttonC_Press, FALLING);
@@ -111,7 +120,11 @@ void loop() {
     resultsUpdated = false;
   }
 
-  switch (gWebServer.handleRequest(gRaceController.runTimes)) {
+  switchPressed[0] = digitalRead(SWITCH_1);
+  switchPressed[1] = digitalRead(SWITCH_2);
+  switchPressed[2] = digitalRead(SWITCH_3);
+
+  switch (gWebServer.handleRequest(gRaceController.runTimes, switchPressed)) {
     case Start:
       buttonAPressed = true;
       break;
@@ -128,6 +141,9 @@ void loop() {
       gRaceController.directControl(RELAY_START);
       laneComplete = 0;
       resultsUpdated = true;
+      break;
+    case Cancel:
+      gRaceController.directControl(RELAY_CANCEL);
       break;
   }
 

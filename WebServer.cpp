@@ -46,9 +46,9 @@ const IPAddress *WebServer::getIp()
   return &ip;
 }
 
-WebCommand WebServer::handleRequest(float runTimes[4]) {
+WebCommand WebServer::handleRequest(float runTimes[4], int switchPressed[3]) {
   WebCommand cmd = None;
-  char raceTimes[100];
+  char buffer[100];
   WiFiClient client = server.available();
 
   while (client.connected())  // DOES CONNECTED MEAN A QUICK WEB MESSAGE, OR IS IT STUCK IN THIS LOOP A LONG TIME?
@@ -64,8 +64,8 @@ WebCommand WebServer::handleRequest(float runTimes[4]) {
           client.print("Started");
           cmd = Start;
         } else if (!strcmp("/read", msg)) {
-          snprintf(raceTimes, sizeof(raceTimes), "Times %f,%f,%f,%f", runTimes[0], runTimes[1], runTimes[2], runTimes[3]);
-          client.print(raceTimes);
+          snprintf(buffer, sizeof(buffer), "Times %f,%f,%f,%f", runTimes[0], runTimes[1], runTimes[2], runTimes[3]);
+          client.print(buffer);
           cmd = None;
         } else if (!strcmp("/red", msg)) {
           client.print("Red");
@@ -82,6 +82,13 @@ WebCommand WebServer::handleRequest(float runTimes[4]) {
         } else if (!strcmp("/ping", msg)) {
           client.print("Ping");
           cmd = None;
+        } else if (!strcmp("/switch", msg)) {
+          snprintf(buffer, sizeof(buffer), "Switch %d,%d,%d", switchPressed[0], switchPressed[1], switchPressed[2]);
+          client.print(buffer);
+          cmd = None;
+        } else if (!strcmp("/cancel", msg)) {
+          client.print("Cancel");
+          cmd = Cancel;
         }
         client.println();
         rxPtr = 0;

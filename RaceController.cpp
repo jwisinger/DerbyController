@@ -91,15 +91,18 @@ void RaceController::updateResults() {
 
 void RaceController::directControl(int cmd) {
   relay.setAllRelay(false);
-  relay.setRelay(cmd, true);
   derbyUi.init();
-
-  if (cmd == RELAY_START)
+  if (cmd != RELAY_CANCEL)
   {
-      onceTicker.once(1.0f, RaceCallback, RELAY_NONE);
-      startTime = micros();
-      derbyUi.displayCountdown(" ");
-      raceInProgress = false;
-      for (int i = 0; i < sizeof(endTime) / sizeof(endTime[0]); i++) endTime[i] = 0;
+    relay.setRelay(cmd, true);
+
+    if (cmd == RELAY_START)
+    {
+        onceTicker.once(1.0f, RaceCallback, RELAY_NONE);
+        startTime = micros();
+        derbyUi.displayCountdown(" ");
+        raceInProgress = false;
+        for (int i = 0; i < sizeof(endTime) / sizeof(endTime[0]); i++) endTime[i] = 0;
+    }
   }
 }
