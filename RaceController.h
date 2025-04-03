@@ -12,6 +12,7 @@
 #define RELAY_GREEN 2
 #define RELAY_START 3
 #define RELAY_NONE 4
+#define RELAY_CANCEL 5
 
 typedef void (*callback_t)(void);
 

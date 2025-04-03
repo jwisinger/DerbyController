@@ -2,15 +2,16 @@
 #include "RaceController.h"
 #include "WebServer.h"
 
-const char version[] = "1.1";
+const char version[] = "1.2";
 
 #define SENSOR_1 3
 #define SENSOR_2 1
 #define SENSOR_3 16
 #define SENSOR_4 2
-#define SWITCH_1 5
-#define SWITCH_2 18
-#define SWITCH_3 19
+#define SWITCH_1 35
+#define SWITCH_2 5
+#define SWITCH_3 36
+
 #define BUTTON_A 39
 #define BUTTON_B 38
 #define BUTTON_C 37
@@ -140,6 +141,9 @@ void loop() {
       gRaceController.directControl(RELAY_START);
       laneComplete = 0;
       resultsUpdated = true;
+      break;
+    case Cancel:
+      gRaceController.directControl(RELAY_CANCEL);
       break;
   }
 

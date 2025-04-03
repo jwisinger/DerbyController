@@ -8,7 +8,8 @@ typedef enum WebCommand {
   Yellow,
   Green,
   Go,
-  Start
+  Start,
+  Cancel
 } WebCommand;
 
 class WebServer {

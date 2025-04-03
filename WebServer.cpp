@@ -85,6 +85,10 @@ WebCommand WebServer::handleRequest(float runTimes[4], int switchPressed[3]) {
         } else if (!strcmp("/switch", msg)) {
           snprintf(buffer, sizeof(buffer), "Switch %d,%d,%d", switchPressed[0], switchPressed[1], switchPressed[2]);
           client.print(buffer);
+          cmd = None;
+        } else if (!strcmp("/cancel", msg)) {
+          client.print("Cancel");
+          cmd = Cancel;
         }
         client.println();
         rxPtr = 0;
